@@ -31,7 +31,9 @@
     pyproject-build-systems,
     ...
   }: let
-    forEachSystem = nixpkgs.lib.genAttrs (import systems);
+    # Only support Darwin systems
+    darwinSystems = nixpkgs.lib.filter (system: nixpkgs.lib.hasSuffix "-darwin" system) (import systems);
+    forEachSystem = nixpkgs.lib.genAttrs darwinSystems;
     pkgsFor = forEachSystem (system: import nixpkgs {inherit system;});
 
     inherit (nixpkgs) lib;

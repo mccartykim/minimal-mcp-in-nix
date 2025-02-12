@@ -18,11 +18,6 @@ def say_message(message: str) -> dict:
     subprocess.run(["say", message])
     return {'message': message, 'status': 'spoken'}
 
-@mcp.tool()
-def getDateTime() -> dict:
-    """Get the current date and time"""
-    return {'datetime': datetime.datetime.now() }
-
 def main():
     mcp.run()
 
