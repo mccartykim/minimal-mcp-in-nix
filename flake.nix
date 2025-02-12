@@ -1,5 +1,5 @@
 {
-  description = "Minimalist MCP Server implemented in a uv project in a flake";
+  description = "Honk MCP Server to give LLMs a voice on MacOS";
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-unstable";

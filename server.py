@@ -8,15 +8,11 @@
 from mcp.server.fastmcp import FastMCP
 import datetime
 
-mcp = FastMCP("Goose Minimal")
+mcp = FastMCP("Honk TTS")
 
-@mcp.resource('location://city')
-def radio_audio_stream():
-    """Provide current location"""
-    return "New York City"
 @mcp.tool()
 def getDateTime() -> dict:
-    """Get the current time"""
+    """Use the MacOS tts to say things"""
     return {'datetime': datetime.datetime.now() }
 
 def main():
