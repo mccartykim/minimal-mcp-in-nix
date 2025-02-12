@@ -1,5 +1,5 @@
 {
-  description = "Goose min server";
+  description = "Minimalist MCP Server implemented in a uv project in a flake";
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-unstable";
@@ -62,56 +62,6 @@
     );
   in {
     formatter = forEachSystem (system: pkgsFor.${system}.alejandra);
-
-    devShells = forEachSystem (system: {
-      default = let
-        editableOverlay = workspace.mkEditablePyprojectOverlay {
-          root = "$REPO_ROOT";
-        };
-        editablePythonSets = pythonSets.${system}.overrideScope (
-          lib.composeManyExtensions [
-            editableOverlay
-
-            (final: prev: {
-              project_name = prev.project_name.overrideAttrs (old: {
-                src = lib.fileset.toSource {
-                  root = old.src;
-                  fileset = lib.fileset.unions (map (file: old.src + file) [
-                    "/pyproject.toml"
-                    "/README.md"
-                    "/project_name"
-                  ]);
-                };
-                nativeBuildInputs =
-                  old.nativeBuildInputs
-                  ++ final.resolveBuildSystem {
-                    editables = [];
-                  };
-              });
-            })
-          ]
-        );
-
-        virtualenv = editablePythonSets.mkVirtualEnv "server" workspace.deps.all;
-      in
-        pkgsFor.${system}.mkShell {
-          packages = with pkgsFor.${system}; [
-            uv
-            virtualenv
-          ];
-
-          env = {
-            UV_NO_SYNC = "1";
-            UV_PYTHON = "${virtualenv}/bin/python";
-            UV_PYTHON_DOWNLOADS = "never";
-          };
-
-          shellHook = ''
-            unset PYTHONPATH
-            export REPO_ROOT=$(git rev-parse --show-toplevel)
-          '';
-        };
-    });
 
     packages = forEachSystem (system: {
       default = pythonSets.${system}.mkVirtualEnv "server" workspace.deps.default;
