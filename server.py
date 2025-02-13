@@ -1,21 +1,14 @@
-#!/usr/bin/env -S uv run
-# /// script
-# dependencies = [
-#     "mcp",
-# ]
-# ///
-
 from mcp.server.fastmcp import FastMCP
 import datetime
 
 mcp = FastMCP("Goose Minimal")
 
 @mcp.resource('location://city')
-def radio_audio_stream():
+def get_location():
     """Provide current location"""
     return "New York City"
 @mcp.tool()
-def getDateTime() -> dict:
+def get_date_time() -> dict:
     """Get the current time"""
     return {'datetime': datetime.datetime.now() }
 
